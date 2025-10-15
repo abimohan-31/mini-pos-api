@@ -1,13 +1,15 @@
 import express from "express";
 import connectDB from "./config/db.js";
 import dotenv from "dotenv";
+// Import routes
+// Customer routes
+import customerRoute from "./routes/customerRoutes.js";
 
+// Initialized express
 const app = express();
 
 // Middleware added
 app.use(express.json());
-
-dotenv.config(process.env.MONGO_URI);
 
 // Test if the server is working or not.
 app.get("/", (req, res) => {
@@ -15,10 +17,12 @@ app.get("/", (req, res) => {
 });
 
 // Mongo DB connected
+dotenv.config(process.env.MONGO_URI);
 connectDB();
 
-const PORT = process.env.PORT;
+app.use("/api/mini-pos", customerRoute);
 
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server is running in http://localhost:${PORT}`);
 });
