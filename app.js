@@ -1,9 +1,10 @@
 import express from "express";
 import connectDB from "./config/db.js";
-import dotenv from "dotenv";
 // Import routes
+
 // Customer routes
 import customerRoute from "./routes/customerRoutes.js";
+import itemRoute from "./routes/itemRoutes.js";
 
 // Initialized express
 const app = express();
@@ -17,10 +18,10 @@ app.get("/", (req, res) => {
 });
 
 // Mongo DB connected
-dotenv.config(process.env.MONGO_URI);
 connectDB();
 
 app.use("/api/customers", customerRoute);
+app.use("/api/items", itemRoute);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
