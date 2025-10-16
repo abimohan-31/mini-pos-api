@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
 dotenv.config(process.env.MONGO_URI);
 connectDB();
 
-app.use("/api/mini-pos", customerRoute);
+app.use("/api/customers", customerRoute);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
