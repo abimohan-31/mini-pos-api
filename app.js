@@ -5,6 +5,7 @@ import connectDB from "./config/db.js";
 // Customer routes
 import customerRoute from "./routes/customerRoutes.js";
 import itemRoute from "./routes/itemRoutes.js";
+import saleRoute from "./routes/saleRoutes.js";
 
 // Initialized express
 const app = express();
@@ -22,6 +23,7 @@ connectDB();
 
 app.use("/api/customers", customerRoute);
 app.use("/api/items", itemRoute);
+app.use("/api/sales", saleRoute);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
