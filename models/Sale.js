@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
+import Customer from "./Customer.js";
 
 const saleSchema = new mongoose.Schema({
   customer: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Customer",
+    ref: Customer,
     required: true,
   },
 
