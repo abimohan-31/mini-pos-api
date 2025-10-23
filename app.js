@@ -25,7 +25,7 @@ app.use("/api/customers", customerRoute);
 app.use("/api/items", itemRoute);
 app.use("/api/sales", saleRoute);
 
-// const PORT = process.env.PORT;
-// app.listen(PORT, () => {
-//   console.log(`Server is running in http://localhost:${PORT}`);
-// });
+const PORT = process.env.PORT;
+app.listen(PORT, () => {
+  console.log(`Server is running in http://localhost:${PORT}`);
+});
