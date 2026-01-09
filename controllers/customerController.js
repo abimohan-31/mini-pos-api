@@ -33,14 +33,14 @@ export const getCustomerById = async (req, res) => {
 export const createCustomer = async (req, res) => {
   try {
     const newCustomer = new Customer(req.body);
-
     const savedCustomer = await newCustomer.save();
-    res.status(200).json({
+    res.status(201).json({
+      success: true,
       Message: "Customer created successfully",
       Customer: savedCustomer,
     });
   } catch (error) {
-    res.status(500).json({ Error: error.message });
+    res.status(400).json({ success: false, Error: error.message });
   }
 };
 
@@ -48,23 +48,25 @@ export const createCustomer = async (req, res) => {
 export const updateCustomer = async (req, res) => {
   try {
     const customerId = req.params.id;
-    const customerExist = await Customer.findById({ _id: customerId });
-    if (!customerExist)
-      return res.status(404).json({ Error: "Customer not found" });
-
     const updatedCustomer = await Customer.findByIdAndUpdate(
       customerId,
       req.body,
       {
         new: true,
+        runValidators: true,
       }
     );
+
+    if (!updatedCustomer)
+      return res.status(404).json({ success: false, Error: "Customer not found" });
+
     res.status(200).json({
+      success: true,
       Message: "Customer updated successfully",
       Customer: updatedCustomer,
     });
   } catch (error) {
-    res.status(500).json({ Error: error.message });
+    res.status(400).json({ success: false, Error: error.message });
   }
 };
 

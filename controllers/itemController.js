@@ -32,14 +32,14 @@ export const getItemById = async (req, res) => {
 export const createItem = async (req, res) => {
   try {
     const newItem = new Item(req.body);
-
     const savedItem = await newItem.save();
-    res.status(200).json({
+    res.status(201).json({
+      success: true,
       Message: "Item created successfully",
       Item: savedItem,
     });
   } catch (error) {
-    res.status(500).json({ Error: error.message });
+    res.status(400).json({ success: false, Error: error.message });
   }
 };
 
@@ -47,18 +47,20 @@ export const createItem = async (req, res) => {
 export const updateItem = async (req, res) => {
   try {
     const itemId = req.params.id;
-    const itemExist = await Item.findById({ _id: itemId });
-    if (!itemExist) return res.status(404).json({ Error: "item not found" });
-
     const updatedItem = await Item.findByIdAndUpdate(itemId, req.body, {
       new: true,
+      runValidators: true,
     });
+
+    if (!updatedItem) return res.status(404).json({ success: false, Error: "Item not found" });
+
     res.status(200).json({
+      success: true,
       Message: "Item updated successfully",
       Item: updatedItem,
     });
   } catch (error) {
-    res.status(500).json({ Error: error.message });
+    res.status(400).json({ success: false, Error: error.message });
   }
 };
 

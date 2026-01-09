@@ -11,7 +11,8 @@ const customerSchema = new mongoose.Schema(
 
     email: {
       type: String,
-      unique: [, "Email is required"],
+      unique: true,
+      required: [true, "Email is required"],
       lowercase: true,
       trim: true,
       match: [

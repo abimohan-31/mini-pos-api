@@ -32,14 +32,14 @@ export const getSaleById = async (req, res) => {
 export const createSale = async (req, res) => {
   try {
     const newSale = new Sale(req.body);
-
     const savedSale = await newSale.save();
-    res.status(200).json({
+    res.status(201).json({
+      success: true,
       Message: "Sale created successfully",
       Sale: savedSale,
     });
   } catch (error) {
-    res.status(500).json({ Error: error.message });
+    res.status(400).json({ success: false, Error: error.message });
   }
 };
 
@@ -47,18 +47,20 @@ export const createSale = async (req, res) => {
 export const updateSale = async (req, res) => {
   try {
     const saleId = req.params.id;
-    const saleExist = await Sale.findById({ _id: saleId });
-    if (!saleExist) return res.status(404).json({ Error: "sale not found" });
-
     const updatedSale = await Sale.findByIdAndUpdate(saleId, req.body, {
       new: true,
+      runValidators: true,
     });
+
+    if (!updatedSale) return res.status(404).json({ success: false, Error: "Sale not found" });
+
     res.status(200).json({
+      success: true,
       Message: "Sale updated successfully",
-      sale: updatedSale,
+      Sale: updatedSale,
     });
   } catch (error) {
-    res.status(500).json({ Error: error.message });
+    res.status(400).json({ success: false, Error: error.message });
   }
 };
 

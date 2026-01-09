@@ -1,14 +1,38 @@
 import express from "express";
-import connectDB from "./config/db.js";
-// Import routes
+import dotenv from "dotenv";
+import cors from "cors";
+import helmet from "helmet";
+import morgan from "morgan";
+import rateLimit from "express-rate-limit";
 
-// Customer routes
+import connectDB from "./config/db.js";
+
+// Import routes
 import customerRoute from "./routes/customerRoutes.js";
 import itemRoute from "./routes/itemRoutes.js";
 import saleRoute from "./routes/saleRoutes.js";
 
+// Load env vars
+dotenv.config();
+
 // Initialized express
 const app = express();
+
+// Security Middleware
+app.use(helmet());
+app.use(cors());
+
+// Rate Limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+});
+app.use("/api/", limiter);
+
+// Logging
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 
 // Middleware added
 app.use(express.json());
@@ -18,14 +42,15 @@ app.get("/", (req, res) => {
   res.send("Welcome to Mini pos API");
 });
 
-// Mongo DB connected
-connectDB();
-
+// Routes
 app.use("/api/customers", customerRoute);
 app.use("/api/items", itemRoute);
 app.use("/api/sales", saleRoute);
 
-const PORT = process.env.PORT;
+// Mongo DB connected
+connectDB();
+
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running in http://localhost:${PORT}`);
 });
