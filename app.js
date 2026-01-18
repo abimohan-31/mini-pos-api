@@ -37,9 +37,30 @@ if (process.env.NODE_ENV === "development") {
 // Middleware added
 app.use(express.json());
 
-// Test if the server is working or not.
+// Root route provides guidance for the API
 app.get("/", (req, res) => {
-  res.send("Welcome to Mini pos API");
+  res.status(200).json({
+    message: "Welcome to Mini POS API",
+    description: "A lightweight Point of Sale API for managing customers, items, and sales.",
+    documentation: {
+      base_url: "/api",
+      endpoints: {
+        customers: {
+          path: "/api/customers",
+          methods: ["GET", "POST", "GET /:id", "PUT /:id", "DELETE /:id"]
+        },
+        items: {
+          path: "/api/items",
+          methods: ["GET", "POST", "GET /:id", "PUT /:id", "DELETE /:id"]
+        },
+        sales: {
+          path: "/api/sales",
+          methods: ["GET", "POST", "GET /:id", "PUT /:id", "DELETE /:id"]
+        }
+      }
+    },
+    status: "Active"
+  });
 });
 
 // Routes
